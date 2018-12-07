@@ -23,6 +23,7 @@ int findChaine(char *str) // cette fonction regarde dans la string str si il y a
 {
 	char test[3]; // pour me balader dans str 
 
+	test[2] = '\0';
 	if (strlen(str) <= 2) // si la taille de str n'est pas bonne. il ne peut pas y avoir de "&&" si elle de fait que 2 de taille
 		return (0);
 	for (int i = 0; str[i + 1] != '\0'; i++) {
