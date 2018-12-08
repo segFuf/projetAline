@@ -25,3 +25,14 @@ int my_cd(int ac, char *av[])
 
 	return (0);
 }
+
+int my_exit(int a, char *path[])
+{
+	printf("Aborted (core dumped)\n"); 
+	exit(EXIT_SUCCESS);
+}
+
+int command_empty(int a, char *path[]) // fonction vide qui sert juste a retourner -2 pour le if ((*commandes[fd_Commande(mot[0])])(t,mot) == -2) de la commande execCommande
+{
+	return (-2);
+}

@@ -19,12 +19,28 @@ int decouper(char * ligne, char * separ, char * mot[], int maxmot)
 	return (i);
 }
 
+int findPipe(char *str) // cette fonction regarde dans la string str si il y a "|"
+{
+	char test[2]; // pour me balader dans str 
+
+	test[1] = '\0';
+	if (strlen(str) < 3) // si la taille de str n'est pas bonne. il ne peut pas y avoir de "|"
+		return (0);
+	for (int i = 0; str[i + 1] != '\0'; i++) {
+		test[0] = str[i]; // je prend 1 charactere de str et je teste avec la fonction strcmp
+		if (strcmp(test,"|") == 0) // strcmp renvoie 0 quand les strings sont identique
+			return (1);
+	}
+	return (0); 
+}
+
+
 int findChaine(char *str) // cette fonction regarde dans la string str si il y a "&&"
 {
 	char test[3]; // pour me balader dans str 
 
 	test[2] = '\0';
-	if (strlen(str) <= 2) // si la taille de str n'est pas bonne. il ne peut pas y avoir de "&&" si elle de fait que 2 de taille
+	if (strlen(str) < 4) // si la taille de str n'est pas bonne. il ne peut pas y avoir de "&&"
 		return (0);
 	for (int i = 0; str[i + 1] != '\0'; i++) {
 		test[0] = str[i];
@@ -55,6 +71,12 @@ int (**get_tab_commande(void))(int , char *[]) // la fonction qui creer et renvo
 	tab[2] = &command_empty;
 
 	return (tab);
+}
+
+void clear_pipe(env_t *env)
+{
+	env->in[0] = 0;
+	env->out[0] = 0;
 }
 
 #ifdef TEST 

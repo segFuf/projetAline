@@ -61,7 +61,7 @@ int set_redirections(char *mot[], int nb_arg, env_t *env)
 1>&2 redirige stdout dans stderr					stdout > stderr
 */
 
-int set_double_red(char *mot[], int nb_arg, env_t *env)
+int set_std_red(char *mot[], int nb_arg, env_t *env)
 {
 	char **redictions = malloc(sizeof(*redictions) * 3);
 	redictions[0] = "2>&1";
