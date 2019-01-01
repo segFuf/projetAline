@@ -61,9 +61,9 @@ int fd_Commande(char *str) // check si la commande existe
 	return (2); // la valeur de retour 2 represente la fonction empty dans mon tableau de fonction car je n'ai pas fait la commande dans str pour l'instant
 }
 
-int (**get_tab_commande(void))(int , char *[]) // la fonction qui creer et renvoie le tableau de fonctions que j'utilise dans la fonction execCommande
+int (**get_tab_commande(void))(int , char *[], env_t *) // la fonction qui creer et renvoie le tableau de fonctions que j'utilise dans la fonction execCommande
 {
-	int (**tab)(int ,char *[]);
+	int (**tab)(int ,char *[], env_t *);
 
 	tab = malloc(sizeof(*tab)*3);
 	tab[0] = &my_exit; // quand fd_commande retourne 0, cela appellera my_exit. 

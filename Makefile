@@ -1,9 +1,8 @@
-ROOT_DIR	=	$(realpath .)
-
-SRC	=	$(ROOT_DIR)/cd.c \
-		$(ROOT_DIR)/exit.c \
-		$(ROOT_DIR)/minishell.c \
-		$(ROOT_DIR)/utils.c\
+SRC	=	commands.c \
+		exec.c \
+		minishell.c \
+		utils.c\
+		redirections.c\
 
 CC	=	gcc
 
@@ -11,7 +10,7 @@ NAME	=	minishell
 
 OBJ	=	$(SRC:.c=.o)
 
-CFLAGS	+=	-std=c99 -fPIC -Wall -Wextra ##-Werror
+CFLAGS	+=	-std=c99 -fPIC -Wextra -D_XOPEN_SOURCE=700 
 
 all:	$(NAME)
 

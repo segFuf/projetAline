@@ -3,12 +3,10 @@
 void execCommande(char *mot[], int t, env_t *env)
 {
 	char pathname[MaxPathLength];
-	int (**commandes)(int ,char *[]); // création d'un pointeur sur pointeur de fonction
 
 	set_redirections(mot,t,env);
 	set_std_red(mot,t,env);
-	commandes = get_tab_commande(); // je recupére le tableau de fonction
-	if ( (*commandes[fd_Commande(mot[0])])(t,mot) == -2) { // appelle de la fonction du tableau de fonction, fd_commande doit renvoyer l'endroit ou se trouve la commande demandé dans le tableau
+	if ((*(env->commandes)[fd_Commande(mot[0])])(t, mot, env) == -2) { // appelle de la fonction du tableau de fonction, fd_commande doit renvoyer l'endroit ou se trouve la commande demandé dans le tableau
 		for(int i = 0; env->dirs[i] != 0; i++) {  // si je n'ai pas fait la commande demandé, fd_fonction va renvoyer 2 qui est la place de command_empty qui renvoie -2. On execute alors avec exec.
 			snprintf(pathname, sizeof pathname, "%s/%s", env->dirs[i], mot[0]);
 			execv(pathname, mot);
@@ -22,29 +20,29 @@ void execCommande(char *mot[], int t, env_t *env)
 int execution(char *commandes, env_t *env, int multi)
 {
 	char *mot[MaxMot];
-	int nb_arg, tmp, status;
+	int nb_arg, status;
 
 	nb_arg = decouper(commandes, " \t\n", mot, MaxMot);
 	if (mot[0] == 0)	// ligne vide
 		return (0);
 	if (fd_Commande(mot[0]) >= 2 || multi == 1) { // si c'est cd ou exit, pas de fork sauf si il veut le faire en arriere plan avec &, bah le cd ou exit marchera pas mais il fait ce qu'il veut
-		tmp = fork();		// lancer le processus enfant
-		if (tmp < 0) {
+		env->processus = fork();		// lancer le processus enfant
+		if (env->processus < 0) {
 			perror("fork");
 			return (0);
 		}
-		if (tmp != 0) {		// parent : attendre la fin de l'enfant
+		if (env->processus != 0) {		// parent : attendre la fin de l'enfant
 			if (env->in[0] != 0)
 				close(env->in[1]);
 			if (env->out[0] != 0)
 				close(env->out[1]);
 			if (multi == 0) { // multi = 0 si on a demander a le faire en arriere plan donc on wait pas le fils dans ce cas
-				while(wait(&status) != tmp);
-				if (WEXITSTATUS(status) == 1) // exit(1) dans la fonction execCommande n'est appeller que quand il y a eu une erreur
+				while(wait(&status) != env->processus);
+				if (WEXITSTATUS(status)) // exit(1) dans la fonction execCommande n'est appeller que quand il y a eu une erreur
 					return (0); // on se casse
 			} 
 			else
-				printf("pid : %d\n",tmp);
+				printf("pid : %d\n", env->processus);
 			return (1);
 		}
 	}

@@ -20,6 +20,8 @@ env_t *set_env()
 
 	new->in[0] = 0;
 	new->out[0] = 0;
+	new->commandes = get_tab_commande(); // je recupére le tableau de fonction
+	
 
 	/* Decouper PATH en repertoires */
 	decouper(getenv("PATH"), ":", new->dirs, MaxDirs);
@@ -27,12 +29,21 @@ env_t *set_env()
 	return (new);
 }
 
-int main(int argc, char * argv[])
+/*char *get_line(char *line, int size, FILE *stream, int *hist, env_t *env)
+{
+	int c;
+	while (c != 10) {
+		c = get
+	}
+
+}*/
+
+int main(void)
 {
 	env_t *env;
 	char ligne[MaxLigne];
 	char *commandes[MaxCommandes];
-	int i, com;
+	int i, com, *hist;
 
 
 	env = set_env();
